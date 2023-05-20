@@ -1,0 +1,6 @@
+{
+    "files.associations": {
+        "videocall.h": "c",
+        "message.h": "c"
+    }
+}

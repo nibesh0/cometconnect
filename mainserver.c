@@ -1,6 +1,8 @@
 #include "messagef/message.h"
-#include "videof/videocall.h"
 #include "filecon/fileshare.h"
+#include "videof/videocall.h"
+
+
 // const char *logo =
 //     "'   /$$      /$$/$$$$$$$$ /$$$$$$  /$$$$$$  /$$$$$$  /$$$$$$ /$$$$$$/$$   /$$ /$$$$$$       \n"
 //     "'  | $$$    /$$| $$_____//$$__  $$/$$__  $$/$$__  $$/$$__  $|_  $$_| $$$ | $$/$$__  $$      \n"
@@ -10,7 +12,7 @@
 //     "'  | $$\\  $ | $| $$      /$$  \\ $$/$$  \\ $| $$  | $| $$  \\ $$ | $$ | $$\\  $$| $$  \\ $$      \n"
 //     "'  | $$ \\/  | $| $$$$$$$|  $$$$$$|  $$$$$$| $$  | $|  $$$$$$//$$$$$| $$ \\  $|  $$$$$$/      \n"
 //     "'  |__/     |__|________/\\______/ \\______/|__/  |__/\\______/|______|__/  \\__/\\______/       \n";
-
+int sockfd;
 struct sockaddr_in serv;
 socklen_t servlen = sizeof(serv);
 int main(int argc, char const *argv[])
@@ -27,10 +29,10 @@ int main(int argc, char const *argv[])
         // printf(logo);
         // printf("\033[0m");
         int choice;
-        printf("Wellcome to messaging Sservices\nChoose a option from bellow:-\n");
-        printf("[1].Chatting\n");
-        printf("[2].filesending\n");
-        printf("[3].Videocall\n");
+        printf("Wellcome to gandu messaging Sservices\nChoose a option from bellow:-\n");
+        printf("[1].Chatting(texting)\n");
+        printf("[2].filesending(Nudes not allowed)\n");
+        printf("[3].Videocall(nudes not allowed)\n");
         printf("[4].Voicecall\n");
         printf("[5].Quit\n");
         scanf("%d", &choice);
@@ -38,7 +40,7 @@ int main(int argc, char const *argv[])
         {
         case 1:
             printf("chatting started...\n");
-            int sockfd;
+            
             if ((sockfd = socket(AF_INET, SOCK_STREAM, 0)) < 0)
             {
                 perror("socket");
@@ -81,10 +83,10 @@ int main(int argc, char const *argv[])
             switch (fileChoice)
             {
             case 1:
-                send_file(argv[1],6969);
+                send_file(argv[1], 6969);
                 break;
             case 2:
-                recive_file(argv[1],6969);
+                recive_file(argv[1], 6969);
                 break;
             default:
                 printf("\033[0;31m");
@@ -96,6 +98,33 @@ int main(int argc, char const *argv[])
             break;
         case 3:
             printf("videocall\n");
+            struct sockaddr_in server_addr;
+            if ((sockfd = socket(AF_INET, SOCK_DGRAM, 0)) == -1)
+            {
+                perror("socket");
+                exit(1);
+            }
+            server_addr.sin_family = AF_INET;
+            server_addr.sin_port = htons(6969);
+            server_addr.sin_addr.s_addr = inet_addr(argv[1]);
+            memset(server_addr.sin_zero, '\0', sizeof(server_addr.sin_zero));
+
+            if (bind(sockfd, (struct sockaddr *)&server_addr, sizeof(struct sockaddr)) == -1)
+            {
+                perror("bind");
+                exit(1);
+            }
+
+            printf("Server started. Waiting for a client...\n");
+            argum server;
+            server.sock = &sockfd;
+            server.serv = &server_addr;
+            pthread_t video_rec,video_sen;
+            // pthread_create(&video_rec,NULL,&recive_video,(void *)&server);
+            pthread_create(&video_sen,NULL,&send_video,(void*)&server);
+            // pthread_join(video_rec,NULL);
+            pthread_join(video_sen,NULL);
+            close(sockfd);            
             break;
         case 4:
             printf("voicecall\n");
@@ -103,7 +132,7 @@ int main(int argc, char const *argv[])
         case 5:
             goto exiT;
         default:
-            printf("\033[0;31m"); 
+            printf("\033[0;31m");
             printf("[-1]not a valid choice\n");
             printf("\033[0m");
             break;

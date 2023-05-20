@@ -10,7 +10,7 @@
 //     "'  | $$\\  $ | $| $$      /$$  \\ $$/$$  \\ $| $$  | $| $$  \\ $$ | $$ | $$\\  $$| $$  \\ $$      \n"
 //     "'  | $$ \\/  | $| $$$$$$$|  $$$$$$|  $$$$$$| $$  | $|  $$$$$$//$$$$$| $$ \\  $|  $$$$$$/      \n"
 //     "'  |__/     |__|________/\\______/ \\______/|__/  |__/\\______/|______|__/  \\__/\\______/       \n";
-
+int sockfd;
 struct sockaddr_in serv;
 socklen_t servlen = sizeof(serv);
 int main(int argc, char const *argv[])
@@ -27,18 +27,18 @@ int main(int argc, char const *argv[])
         // printf(logo);
         // printf("\033[0m");
         int choice;
-        printf("Wellcome to messaging services\nChoose a option from bellow:-\n");
-        printf("[1].Chatting\n");
-        printf("[2].filesending\n");
-        printf("[3].Videocall\n");
-        printf("[4].Voicecall(voip)\n");
+        printf("Wellcome to gandu messaging services\nChoose a option from bellow:-\n");
+        printf("[1].Chatting(texting)\n");
+        printf("[2].filesending(Nudes not allowed)\n");
+        printf("[3].Videocall(nudes not allowed)\n");
+        printf("[4].Voicecall\n");
         printf("[5].Quit\n");
         scanf("%d", &choice);
         switch (choice)
         {
         case 1:
             printf("chatting started...\n");
-            int sockfd = socket(AF_INET, SOCK_STREAM, 0);
+            sockfd = socket(AF_INET, SOCK_STREAM, 0);
             serv.sin_addr.s_addr = inet_addr(argv[1]);
             serv.sin_family = AF_INET;
             serv.sin_port = htons(6969);
@@ -66,10 +66,10 @@ int main(int argc, char const *argv[])
             switch (fileChoice)
             {
             case 1:
-                send_file(argv[1],6969);
+                send_file(argv[1], 6969);
                 break;
             case 2:
-                recive_file(argv[1],6969);
+                recive_file(argv[1], 6969);
                 break;
             default:
                 printf("\033[0;31m");
@@ -79,7 +79,28 @@ int main(int argc, char const *argv[])
             }
             break;
         case 3:
-            printf("videocall\n");
+            printf("videocall starting...\n");
+            struct sockaddr_in server_addr;
+            if ((sockfd = socket(AF_INET, SOCK_DGRAM, 0)) == -1)
+            {
+                perror("socket");
+                exit(1);
+            }
+            server_addr.sin_family = AF_INET;
+            server_addr.sin_port = htons(6969);
+            server_addr.sin_addr.s_addr = inet_addr(argv[1]);
+            memset(server_addr.sin_zero, '\0', sizeof(server_addr.sin_zero));
+            argum server;
+            server.sock = &sockfd;
+            server.serv = &server_addr;
+            pthread_t video_rec, video_sen;
+            
+            // pthread_create(&video_sen, NULL, &send_video, (void *)&server);
+            pthread_create(&video_rec, NULL, &recive_video, (void *)&server);
+            
+            // pthread_join(video_sen, NULL);
+            pthread_join(video_rec, NULL);
+            close(sockfd);
             break;
         case 4:
             printf("voicecall\n");
