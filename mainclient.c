@@ -27,11 +27,11 @@ int main(int argc, char const *argv[])
         // printf(logo);
         // printf("\033[0m");
         int choice;
-        printf("Wellcome to gandu messaging services\nChoose a option from bellow:-\n");
-        printf("[1].Chatting(texting)\n");
-        printf("[2].filesending(Nudes not allowed)\n");
-        printf("[3].Videocall(nudes not allowed)\n");
-        printf("[4].Voicecall\n");
+        printf("Wellcome to messaging services\nChoose a option from bellow:-\n");
+        printf("[1].Chatting\n");
+        printf("[2].filesending\n");
+        printf("[3].Videocall\n");
+        printf("[4].Voicecall(voip)\n");
         printf("[5].Quit\n");
         scanf("%d", &choice);
         switch (choice)
