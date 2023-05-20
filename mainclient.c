@@ -1,5 +1,6 @@
-#include "message.h"
-#include "fileshare.h"
+#include "messagef/message.h"
+#include "filecon/fileshare.h"
+#include "videof/videocall.h"
 // const char *logo =
 //     "'   /$$      /$$/$$$$$$$$ /$$$$$$  /$$$$$$  /$$$$$$  /$$$$$$ /$$$$$$/$$   /$$ /$$$$$$       \n"
 //     "'  | $$$    /$$| $$_____//$$__  $$/$$__  $$/$$__  $$/$$__  $|_  $$_| $$$ | $$/$$__  $$      \n"
