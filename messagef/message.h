@@ -7,11 +7,14 @@
 #include <pthread.h>
 void *send_messageServer(void *arg)
 {
-    int new_socket = *(int *)arg;
+    printf("\033[0;32m");
+    int newsockfd = *(int *)arg;
     char message[1024];
     while (1)
     {
+        printf("\033[0;38m");
         fgets(message, 1024, stdin);
+        printf("\033[0m");
         if (strcmp(message, "exit()()") == 0)
         {
             printf("\033[0;31m");
@@ -20,26 +23,26 @@ void *send_messageServer(void *arg)
             exit(1);
         }
 
-        send(new_socket, message, strlen(message), 0);
+        send(newsockfd, message, strlen(message), 0);
     }
 }
 
 void *recv_messageServer(void *arg)
 {
-    int new_socket = *(int *)arg;
+    int newsockfd = *(int *)arg;
     char buffer[1024] = {0};
     while (1)
     {
-        int valread = recv(new_socket, buffer, 1024, 0);
+        int valread = recv(newsockfd, buffer, 1024, 0);
         printf("\033[0;32m");
-        printf("                                                                                                [message+]%s", buffer);
+        printf("                                                                                                [recived message+]%s", buffer);
         printf("\033[0m");
         memset(buffer, 0, sizeof(buffer));
     }
 }
 void *send_messageClient(void *arg)
 {
-    int new_socket = *(int *)arg;
+    int newsockfd = *(int *)arg;
     char message[1024];
     while (1)
     {
@@ -51,18 +54,18 @@ void *send_messageClient(void *arg)
             printf("\033[0m");
             exit(1);
         }
-        send(new_socket, message, strlen(message), 0);
+        send(newsockfd, message, strlen(message), 0);
     }
 }
 void *recv_messageClient(void *arg)
 {
-    int new_socket = *(int *)arg;
+    int newsockfd = *(int *)arg;
     char buffer[1024] = {0};
     while (1)
     {
-        int valread = recv(new_socket, buffer, 1024, 0);
+        int valread = recv(newsockfd, buffer, 1024, 0);
         printf("\033[0;32m");
-        printf("                                                                                                [message+]%s", buffer);
+        printf("                                                                                                [recived message+]%s", buffer);
         printf("\033[0m");
         memset(buffer, 0, sizeof(buffer));
     }
