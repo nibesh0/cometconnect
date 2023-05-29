@@ -40,6 +40,6 @@ const char logo[]=
 "`._                 _..-'~                         ~`-.._            -._ _.'\n"
 "   \"-.=\"      _..-'~                                     ~`-.._        ~`.\n"
 "    /        `.                                                ;          Y\n"
-"   Y           Y                    -devanshu gay             Y           |\n"
+"   Y           Y                    -Commet connect            Y           |\n"
 "   |           ;                                              `.          /\n"
 "   `.       _.'                                                 \"-.____.-'\n";
