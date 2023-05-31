@@ -15,7 +15,7 @@ void *send_messageServer(void *arg)
         printf("\033[0;38m");
         fgets(message, 1024, stdin);
         printf("\033[0m");
-        if (strcmp(message, "exit()()") == 0)
+        if (strcmp(message, "exit\n") == 0)
         {
             printf("\033[0;31m");
             printf("[-1]signing of\n");
@@ -35,19 +35,20 @@ void *recv_messageServer(void *arg)
     {
         int valread = recv(newsockfd, buffer, 1024, 0);
         printf("\033[0;32m");
-        printf("                                                                                                [recived message+]%s", buffer);
+        printf("\n                                                                                                %s", buffer);
         printf("\033[0m");
         memset(buffer, 0, sizeof(buffer));
     }
 }
 void *send_messageClient(void *arg)
 {
+    printf("Enter exit to exit");
     int newsockfd = *(int *)arg;
     char message[1024];
     while (1)
     {
         fgets(message, 1024, stdin);
-        if (strcmp(message, "exit()()") == 0)
+        if (strcmp(message, "exit\n") == 0)
         {
             printf("\033[0;31m");
             printf("[-1]signing of\n");
@@ -59,13 +60,14 @@ void *send_messageClient(void *arg)
 }
 void *recv_messageClient(void *arg)
 {
+    printf("Enter exit to exit");
     int newsockfd = *(int *)arg;
     char buffer[1024] = {0};
     while (1)
     {
         int valread = recv(newsockfd, buffer, 1024, 0);
         printf("\033[0;32m");
-        printf("                                                                                                [recived message+]%s", buffer);
+        printf("\n                                                                                                %s", buffer);
         printf("\033[0m");
         memset(buffer, 0, sizeof(buffer));
     }

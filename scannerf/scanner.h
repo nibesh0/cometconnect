@@ -14,10 +14,14 @@ void scanner() {
     strcat(command, ip_address);
     strcat(command,">/dev/null 2>&1");
     int status = system(command);
-    if (status == 0) {
+    if(status==0)
+{
+
         printf("IP address is alive\n\n\n\n");
     }
-    else {
-        printf("IP address is not reachable\n\n\n\n");
+    else 
+    {
+        printf("IP address is not reachable\n\n\n");
     }
+sleep(2);
 }

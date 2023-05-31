@@ -33,16 +33,20 @@ void recive_file(const char ipAdd[],int PORT)
         printf("\nConnection Failed \n");
         exit(1);
     }
+    long int sizef;
+    recv(sock,&sizef,100,0);
+    sizef = ntohl(sizef);
     recv(sock, path, 100, 0);
     printf("%s", path);
+
     FILE *file = fopen(path, "wb");
     if (file == NULL)
     {
         perror("fopen");
         exit(EXIT_FAILURE);
     }
-
-    size_t n;
+    long int sizetmp=0;
+    int n;
     while ((n = recv(sock, buffer, sizeof(buffer), 0)) > 0)
     {
         if (fwrite(buffer, 1, n, file) != n)
@@ -50,10 +54,19 @@ void recive_file(const char ipAdd[],int PORT)
             perror("fwrite");
             exit(EXIT_FAILURE);
         }
+        sizetmp+=n;
+        if((sizetmp * 100) % sizef == 0)
+        {
+        printf(" %ld bytes,  of %ld%% of the file size.\n", sizetmp, (sizetmp * 100) / sizef);
+        }
+        
     }
 
     close(sock);
     fclose(file);
+    printf("enter to continue\n");
+    getchar();
+
 }
 void send_file(const char ipAddr[],int PORT)
 {
@@ -92,15 +105,35 @@ void send_file(const char ipAddr[],int PORT)
     }
     printf("enter the file name\n");
     scanf("%s", path);
+
+
+
+    FILE* file_s = fopen(path, "rb");
+    if (file_s == NULL) {
+        perror("Failed opening file");
+        exit(1);
+    }
+    fseek(file_s, 0, SEEK_END);
+    long int sizef = ftell(file_s);
+    if (sizef == -1) {
+        perror("Failed getting size");
+        fclose(file_s);
+        exit(1);
+    }
+    fclose(file_s);
+    long int conSize=  htonl(sizef);
+
+
     FILE *file = fopen(path, "rb");
     if (file == NULL)
     {
         perror("fopen");
         exit(EXIT_FAILURE);
     }
-
+    send(new_socket,&conSize,100,0);
     send(new_socket, path, 100, 0);
-    size_t n;
+    long int sizetmp=0;
+    int n;
     while ((n = fread(buffer, 1, sizeof(buffer), file)) > 0)
     {
         if (send(new_socket, buffer, n, 0) != n)
@@ -108,9 +141,17 @@ void send_file(const char ipAddr[],int PORT)
             perror("send");
             exit(EXIT_FAILURE);
         }
+        sizetmp+=n;
+    if((sizetmp * 100) % sizef == 0)
+    {
+    printf(" %ld bytes,  of %ld%% of the file size.\n", sizetmp, (sizetmp * 100) / sizef);
+    }
+        
     }
 
     close(new_socket);
     close(server_fd);
     fclose(file);
+    printf("enter to continue\n");
+    getchar();
 }

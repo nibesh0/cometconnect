@@ -98,7 +98,9 @@ void* receive_video(void* argc) {
             break;
         }
         cv::imshow("call", frame);
-        cv::waitKey(1);
+        if (cv::waitKey(1) == 27) {
+            break;
+        }
     }
 
     pthread_exit(NULL);

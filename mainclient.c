@@ -20,13 +20,14 @@ int main(int argc, char const *argv[])
     {
         
         printf("\033[0;31m");
+        printf("%s",logo2);
         printf("%s",logo);
         printf("\033[0m");
         int choice;
         printf("Wellcome to cometconnet messaging services\nChoose a option from bellow:-\n");
         printf("[1].Chatting(texting)\n");
-        printf("[2].filesending\n");
-        printf("[3].Videocall\n");
+        printf("[2].filesending(nudes not allowed)\n");
+        printf("[3].Videocall(nude not allowed)\n");
         printf("[4].Voicecall\n");
         printf("[9].scan the ip address\n");
         printf("[5].Quit\n");
@@ -154,11 +155,7 @@ int main(int argc, char const *argv[])
             printf("\033[0;31m");
             printf("[-1]not a valid choice\n");
             printf("\033[0m");
-            while(getchar() !='\n'){}
-            // while (getchar() != '\n')
-            // {
-            //     // Wait for Enter key to be pressed
-            // }
+            sleep(2);
             break;
         }
     }
