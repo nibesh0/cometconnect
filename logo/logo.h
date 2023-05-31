@@ -8,7 +8,7 @@ const char logo2[]=
 const char logo[]=
 "                                    .                                                      .\n"
 "                                  .n                   .                 .                  n.\n"
-"                            .   .dP                  dP                   9b                 9b.\n"    .
+"                            .   .dP                  dP                   9b                 9b.     .\n"
 "                           4    qXb         .       dX                     Xb       .        dXp     t\n"
 "                          dX.    9Xb      .dXb    __                         __    dXb.     dXP     .Xb\n"
 "                          9XXb._       _.dXXXXb dXXXXbo.                 .odXXXXb dXXXXb._       _.dXXP\n"
