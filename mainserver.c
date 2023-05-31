@@ -4,19 +4,23 @@
 #include "scannerf/scanner.h"
 #include "audiof/audio.h"
 #include "logo/logo.h"
-// const char logo[]="s";
+struct sockaddr_in servAudio;
+socklen_t servlen2= sizeof(servAudio);
 struct sockaddr_in serv;
 socklen_t servlen = sizeof(serv);
-int sockfd;
+int sockfd,audioSock;
 int main(int argc,const char **argv)
 {
-// printf("enter the ip and port number.");
+if (argc < 2)
+{
+    printf("usage: <ip>");
+    exit(1);
+}
 char ip[17];
 strcpy(ip,argv[1]);
 
 int port=6969;
 
-// scanf("%s %d",ip,&port); 
 while (1)
 {
     // system("clear");
@@ -24,10 +28,10 @@ while (1)
     printf("%s",logo);
     printf("\033[0m");
     int choice;
-    printf("Wellcome to gandu messaging Sservices\nChoose a option from bellow:-\n");
+    printf("Wellcome to cometconnect messaging Sservices\nChoose a option from bellow:-\n");
     printf("[1].Chatting(texting)\n");
-    printf("[2].filesending(Nudes not allowed)\n");
-    printf("[3].Videocall(nudes not allowed)\n");
+    printf("[2].filesending\n");
+    printf("[3].Videocall\n");
     printf("[4].Voicecall\n");
     printf("[9].For scan ip network\n");
     printf("[5].Quit\n");
@@ -43,7 +47,7 @@ while (1)
         }
         serv.sin_family = AF_INET;
         serv.sin_addr.s_addr = inet_addr(ip);
-        serv.sin_port = htons(6969);
+        serv.sin_port = htons(port);
         memset(serv.sin_zero, 0, sizeof(serv.sin_zero));
         if (bind(sockfd, (struct sockaddr *)&serv, sizeof(serv)) < 0)
         {
@@ -55,7 +59,7 @@ while (1)
             perror("listen");
             exit(1);
         }
-        int newfd;
+        int newfd,newfd2;
         if ((newfd = accept(sockfd, (struct sockaddr *)&serv, &servlen)) < 0)
         {
         perror("accept");
@@ -78,10 +82,10 @@ while (1)
         switch (fileChoice)
         {
         case 1:
-            send_file(ip, 6969);
+            send_file(ip, port);
             break;
         case 2:
-            recive_file(ip, 6969);
+            recive_file(ip, port);
             break;
         default:
             printf("\033[0;31m");
@@ -92,19 +96,37 @@ while (1)
 
         break;
         case 3:
+
+
+
+
         printf("videocall\n");
         if ((sockfd = socket(AF_INET, SOCK_STREAM, 0)) < 0)
         {
         perror("socket");
             exit(1);
         }
+        if ((audioSock = socket(AF_INET, SOCK_STREAM, 0)) < 0)
+        {
+        perror("socket3");
+            exit(1);
+        }
         serv.sin_family = AF_INET;
         serv.sin_addr.s_addr = inet_addr(argv[1]);
-        serv.sin_port = htons(6969);
+        serv.sin_port = htons(port);
         memset(serv.sin_zero, 0, sizeof(serv.sin_zero));
+        servAudio.sin_family = AF_INET;
+        servAudio.sin_addr.s_addr = inet_addr(argv[1]);
+        servAudio.sin_port = htons(6970);
+        memset(servAudio.sin_zero, 0, sizeof(serv.sin_zero));
         if (bind(sockfd, (struct sockaddr *)&serv, sizeof(serv)) < 0)
         {
         perror("bind");
+        exit(1);
+        }
+        if (bind(audioSock, (struct sockaddr *)&servAudio, sizeof(servAudio)) < 0)
+        {
+        perror("bind2");
         exit(1);
         }
         if (listen(sockfd, 3) < 0)
@@ -112,20 +134,32 @@ while (1)
         perror("listen");
         exit(1);
         }
+        printf("%d\n",sockfd);
+        if (listen(audioSock, 3) < 0)
+        {
+        perror("listen2");
+        exit(1);
+        }
+        printf("%d\n",audioSock);
         if ((newfd = accept(sockfd, (struct sockaddr *)&serv, &servlen)) < 0)
         {
         perror("accept");
         exit(1);
         }
-            pthread_t videoSend, videoRec,audioVrecv,audioVsend;
+        if ((newfd2 = accept(audioSock, (struct sockaddr *)&servAudio, &servlen2)) < 0)
+        {
+        perror("accept2");
+        exit(1);
+        }
+            pthread_t videoSend, videoRec,audioSer;
             pthread_create(&videoSend, NULL, &send_video, &newfd);
-            pthread_create(&audioVsend, NULL, &audio_Send, &newfd);
-            pthread_create(&videoRec, NULL, &receive_video, &newfd);
-            pthread_create(&audioVrecv, NULL, &audio_Recv, &newfd);
+            pthread_create(&videoRec,NULL,&receive_video,&newfd);
+            pthread_create(&audioSer, NULL, &audioServer, &newfd2);
+
+
             pthread_join(videoSend, NULL);
-            pthread_join(audioVsend,NULL);
             pthread_join(videoRec, NULL);
-            pthread_join(audioVrecv,NULL);
+            pthread_join(audioSer,NULL);
             close(sockfd);
             close(newfd);
             break;
@@ -139,7 +173,7 @@ while (1)
             memset(&serv, 0, sizeof(serv));
             serv.sin_family = AF_INET;
             serv.sin_addr.s_addr = inet_addr(ip);
-            serv.sin_port = htons(6969);
+            serv.sin_port = htons(port);
 
             if (bind(sockfd, (struct sockaddr *)&serv, sizeof(serv)) < 0) {
             error("Error binding socket");
@@ -152,11 +186,10 @@ while (1)
             printf("Waiting for incoming connections...\n");
 
             newfd = accept(sockfd, (struct sockaddr *)&serv, &servlen);
-            pthread_t audioRecv,audioSend;
-            pthread_create(&audioRecv,NULL,&audio_Recv,&newfd);
-            // pthread_create(&audioSend,NULL,&audio_Send,&newfd);
+            printf(".......dfgh%d\n",newfd);
+            pthread_t audioRecv;
+            pthread_create(&audioRecv,NULL,&audioServer,&newfd);
             pthread_join(audioRecv,NULL);
-            // pthread_join(audioSend,NULL);
             close(sockfd);
             close(newfd);
 
@@ -174,10 +207,10 @@ while (1)
             printf("[-1]not a valid choice\n");
             printf("\033[0m");
 
-            while (getchar() != '\n')
-            {
-                // Wait for Enter key to be pressed
-            }
+            // while (getchar() != '\n')
+            // {
+            //     // Wait for Enter key to be pressed
+            // }
             break;
         }
     }

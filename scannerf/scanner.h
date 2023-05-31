@@ -1,30 +1,23 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-void scanner(){
-    char base_ip[16];    
 
-    printf("Enter the base IP address (e.g., 192.168.0.): ");
-    scanf("%15s", base_ip);
 
-    for (int i = 1; i <= 255; ++i) {
-        char ip[16];
-        char k[10];
-        char command[50] = "ping -c 1 -w 1 ";
-        
-        snprintf(k, sizeof(k), "%d", i);
-        strcat(base_ip, k);
-        printf("at %s\n",base_ip);
-        strcat(command, base_ip);
-        strcat(command, " > /dev/null");
+void scanner() {
+    char ip_address[20];
+    char command[100]; 
 
-        int result = system(command);
+    printf("Enter the IP address to check: ");
+    scanf("%s", ip_address);
 
-        if (result == 0) {
-            printf("IP address %s is up\n", base_ip);
-        }
-
-        base_ip[strlen(base_ip) - strlen(k)] = '\0';
+    strcpy(command, "ping -c 1 ");
+    strcat(command, ip_address);
+    strcat(command,">/dev/null 2>&1");
+    int status = system(command);
+    if (status == 0) {
+        printf("IP address is alive\n\n\n\n");
     }
-
+    else {
+        printf("IP address is not reachable\n\n\n\n");
+    }
 }
