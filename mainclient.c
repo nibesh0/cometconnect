@@ -26,8 +26,8 @@ int main(int argc, char const *argv[])
         int choice;
         printf("Wellcome to cometconnet messaging services\nChoose a option from bellow:-\n");
         printf("[1].Chatting(texting)\n");
-        printf("[2].filesending(nudes not allowed)\n");
-        printf("[3].Videocall(nude not allowed)\n");
+        printf("[2].filesending\n");
+        printf("[3].Videocall\n");
         printf("[4].Voicecall\n");
         printf("[9].scan the ip address\n");
         printf("[5].Quit\n");

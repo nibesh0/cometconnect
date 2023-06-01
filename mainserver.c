@@ -31,8 +31,8 @@ while (1)
     int choice;
     printf("Wellcome to cometconnect messaging Sservices\nChoose a option from bellow:-\n");
     printf("[1].Chatting(texting)\n");
-    printf("[2].filesending(nudes not allowed)\n");
-    printf("[3].Videocall(nude not allowed)\n");
+    printf("[2].filesending\n");
+    printf("[3].Videocall\n");
     printf("[4].Voicecall\n");
     printf("[9].For scan ip network\n");
     printf("[5].Quit\n");
