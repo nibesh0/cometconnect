@@ -1,4 +1,5 @@
 # CometConnect
+[video link](https://drive.google.com/drive/folders/1K-3gOTwGNQXIot2M5lZn6QccNHQ-eTnn)
 
 CometConnect is a secure and fast peer-to-peer (P2P) communication project designed for Linux. It utilizes PortAudio, OpenCV, and PThreads to enable efficient and reliable communication between peers.
 
